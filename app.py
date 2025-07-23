@@ -68,15 +68,15 @@ def registro():
 
     return render_template("registro.html")
 
-@app.route("/categorias")
+@app.route("/categoria")
 def ver_categorias():
     categorias = Categoria.query.all()
-    return render_template("categorias.html", categorias=categorias)
+    return render_template("categoria.html", categorias=categorias)
 
 @app.route("/productos/categoria/<int:id_categoria>")
 def ver_productos_por_categoria(id_categoria):
     categoria = Categoria.query.get_or_404(id_categoria)
-    productos = categoria.productos  # Usa la relación definida en el modelo
+    productos = categoria.productos  
     return render_template("productos.html", categoria=categoria, productos=productos)
 
 # Ejecutar app

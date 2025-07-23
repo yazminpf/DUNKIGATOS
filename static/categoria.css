@@ -1,52 +1,54 @@
-body {
-    font-family: 'Montserrat', sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-}
-
 .contenedor {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 40px 20px;
-    text-align: center;
-}
-
-h1 {
-    font-size: 2.5rem;
-    color: #333;
-    margin-bottom: 30px;
+    padding: 20px;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .grid-categorias {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
 }
 
 .categoria {
     background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-decoration: none;
-    color: #333;
-    transition: transform 0.2s;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    text-align: center;
+    width: 250px;
+    transition: transform 0.2s ease;
 }
 
 .categoria:hover {
-    transform: scale(1.03);
+    transform: scale(1.05);
 }
 
 .categoria img {
     width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    height: auto;
+    border-radius: 8px;
 }
 
 .categoria h2 {
-    margin: 15px;
+    margin: 15px 0;
     font-size: 1.2rem;
-    text-transform: uppercase;
 }
+
+.btn-seleccionar {
+    background-color: #5E60CE;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.btn-seleccionar:hover {
+    background-color: #4A4CCC;
+}
+

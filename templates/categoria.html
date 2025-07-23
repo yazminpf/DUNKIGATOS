@@ -18,7 +18,7 @@
 
         <div class="grid-categorias">
             {% for categoria in categorias %}
-                <a href="{{ url_for('ver_productos_por_categoria', id_categoria=categoria.id_categoria) }}" class="categoria">
+                    <a href="{{ url_for('ver_productos_por_categoria', id_categoria=categoria.id_categoria) }}" class="btn-seleccionar">Seleccionar</a>
                     <img src="{{ url_for('static', filename='Imagenes/' ~ imagenes[categoria.nombre_grupo]) }}" alt="{{ categoria.nombre_grupo }}">
                     <h2>{{ categoria.nombre_grupo }}</h2>
                 </a>
