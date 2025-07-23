@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from models import Usuario, Rol, Permiso, RolUsuario, Categoria, Producto
 from database import db
+import os
 
 app = Flask(__name__)
 
@@ -73,17 +74,10 @@ if __name__ == "__main__":
         probar_conexion()
         db.create_all()
 
-        #from models import Categoria, Producto
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
 
-        #if not Categoria.query.first():
-           #categorias = [ ... ]
-           #db.session.bulk_save_objects(categorias)
-           #db.session.commit()
-
-        #if not Producto.query.first():
-            #productos = [ ... ]
-            #db.session.bulk_save_objects(productos)
-            #db.session.commit()
+        
 
 
 
