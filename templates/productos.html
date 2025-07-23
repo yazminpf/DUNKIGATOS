@@ -8,17 +8,21 @@
 </head>
 <body>
     <div class="contenedor">
-        <h1>Grupo de Productos</h1>
+        <h1>Selecciona un producto</h1>
+
+        {% set imagenes = {
+            'PLATO PRINCIPAL': 'plato-fuerte.jpg',
+            'BEBIDAS': 'bebidas.jpg',
+            'ACOMPAÑANTES': 'acompañantes.jpg'
+        } %}
 
         {% for categoria in categorias %}
-            <h2 class="categoria">{{ categoria.plato-fuerte }}</h2>
+            <h2 class="categoria">{{ categoria.nombre_grupo }}</h2>
             <div class="grid-productos">
                 {% for producto in categoria.productos %}
                     <div class="producto">
-                        <img src="{{ url_for('static', filename='Imagenes/plato-fuerte.jpg') }}" alt="{{ plato-fuerte }}">
-                        <h3>{{ producto.nombre }}</h3>
-                        <p class="descripcion">{{ Pasta Pesto }}</p>
-                        <p class="precio">$ {{ 25000 }}</p>
+                        <img src="{{ url_for('static', filename='Imagenes/' ~ imagenes[categoria.nombre_grupo]) }}" alt="{{ categoria.nombre_grupo }}">
+                        <h3>{{ producto.nom_producto }}</h3>
                         <button class="btn-seleccionar">Seleccionar</button>
                     </div>
                 {% endfor %}
