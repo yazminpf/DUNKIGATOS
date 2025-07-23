@@ -73,35 +73,19 @@ if __name__ == "__main__":
         probar_conexion()
         db.create_all()
 
-        from models import Categoria, Producto
+        #from models import Categoria, Producto
 
-        if not Categoria.query.first():
-            categorias = [
-                Categoria(nombre_grupo='PLATO PRINCIPAL'),
-                Categoria(nombre_grupo='BEBIDAS'),
-                Categoria(nombre_grupo='ACOMPAÑANTES')
-            ]
-            db.session.bulk_save_objects(categorias)
-            db.session.commit()
-            print("✅ Categorías insertadas")
+        #if not Categoria.query.first():
+           #categorias = [ ... ]
+           #db.session.bulk_save_objects(categorias)
+           #db.session.commit()
 
-        if not Producto.query.first():
-            productos = [
-                Producto(nom_producto='Pasta Pesto', valor_producto=25000, id_categoria=1),
-                Producto(nom_producto='Hamburguesa', valor_producto=21000, id_categoria=1),
-                Producto(nom_producto='Trucha al Ajillo', valor_producto=34000, id_categoria=1),
-                Producto(nom_producto='Limonada de Coco', valor_producto=6000, id_categoria=2),
-                Producto(nom_producto='Limonada Natural', valor_producto=4500, id_categoria=2),
-                Producto(nom_producto='Coca cola', valor_producto=5000, id_categoria=2),
-                Producto(nom_producto='Papas francesas', valor_producto=8000, id_categoria=3),
-                Producto(nom_producto='Patacon', valor_producto=10000, id_categoria=3),
-                Producto(nom_producto='Chorizo', valor_producto=4500, id_categoria=3),
-            ]
-            db.session.bulk_save_objects(productos) 
-            db.session.commit()
-            print("✅ Productos insertados")
-    
-app.run(debug=True)
+        #if not Producto.query.first():
+            #productos = [ ... ]
+            #db.session.bulk_save_objects(productos)
+            #db.session.commit()
+
+
 
 
 
