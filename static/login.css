@@ -1,0 +1,72 @@
+body.fondo-login {
+    background-image: url('../static/Imagenes/centromesa.jpg'); /* Cambia el nombre si es diferente */
+    background-size: cover;
+    background-position: center;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    color: white;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    backdrop-filter: brightness(0.4); /* oscurece ligeramente el fondo */
+}
+
+.logo-login {
+    width: 200px;
+    margin-bottom: 20px;
+}
+
+.formulario-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.formulario-login label {
+    align-self: flex-start;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.formulario-login input {
+    width: 250px;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+}
+
+.btn-ingresar {
+    padding: 10px 20px;
+    background-color: #1f1f1f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-ingresar:hover {
+    background-color: #333;
+}
+
+.logo-grande img {
+    width: 180px;
+    margin-top: 30px;
+}
+
+.mensaje-error {
+    color: #ff6666;
+    font-weight: bold;
+    margin-bottom: 15px;
+}

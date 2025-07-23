@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+        <title>Dunki Gatos app</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+
+    </head>
+    <body>
+        <div class="contenedor">
+            <div class="lado-izquierdo">
+                <img src="{{ url_for('static', filename='Imagenes/logo.jpg') }}" alt="logo Dunki Gatos" class="logo">
+                <h1 class="titulo">¡Hola, partnerDunki!</h1>
+                <h2 class="subtitulo">Bienvenido</h2>                
+                <p class="descripcion">Restaurante</p>
+            </div>
+            <div class="lado-derecho">
+                <img src="{{ url_for('static', filename='Imagenes/coctel-en-mesa-de-madera-en-el-restaurante.jpg') }}" alt="Interior del restaurante" class="imagen-fondo">
+                <a href="{{ url_for('registro') }}" class="btn-inicio">Registrarse</a>
+                <a href="{{ url_for('login') }}" class="btn-registro">Iniciar sesión</a> 
+            </div>
+        </div>
+
+        <footer>
+            <!-- CORRECTO: coma agregada y comillas bien colocadas -->
+            <img src="{{ url_for('static', filename='Imagenes/coctel-en-mesa-de-madera-en-el-restaurante.jpg') }}" alt="ilustracion de restaurante">
+        </footer>
+
+    </body>
+</html>
+ 
