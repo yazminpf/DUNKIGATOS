@@ -8,12 +8,12 @@ import os
 app = Flask(__name__)
 
 # Configuración de PostgreSQL
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Luc1995%2B@localhost/dunki_gatos_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "postgresql://postgres:Luc1995%2B@localhost/dunki_gatos_db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Inicializar la base de datos con la app
 db.init_app(app)
-
+ 
 # Probar conexión
 def probar_conexion():
     try:
