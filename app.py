@@ -68,6 +68,17 @@ def registro():
 
     return render_template("registro.html")
 
+@app.route("/categorias")
+def ver_categorias():
+    categorias = Categoria.query.all()
+    return render_template("categorias.html", categorias=categorias)
+
+@app.route("/productos/categoria/<int:id_categoria>")
+def ver_productos_por_categoria(id_categoria):
+    categoria = Categoria.query.get_or_404(id_categoria)
+    return render_template("productos.html", categorias=[categoria])
+
+
 # Ejecutar app
 if __name__ == "__main__":
     with app.app_context():

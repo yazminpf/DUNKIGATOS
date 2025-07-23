@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Categorías - Dunki Gatos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='categorias.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="contenedor">
+        <h1>Elige una categoría</h1>
+
+        {% set imagenes = {
+            'PLATO PRINCIPAL': 'plato-fuerte.jpg',
+            'BEBIDAS': 'bebidas.jpg',
+            'ACOMPAÑANTES': 'acompañantes.jpg'
+        } %}
+
+        <div class="grid-categorias">
+            {% for categoria in categorias %}
+                <a href="{{ url_for('ver_productos_por_categoria', id_categoria=categoria.id_categoria) }}" class="categoria">
+                    <img src="{{ url_for('static', filename='Imagenes/' ~ imagenes[categoria.nombre_grupo]) }}" alt="{{ categoria.nombre_grupo }}">
+                    <h2>{{ categoria.nombre_grupo }}</h2>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
