@@ -20,7 +20,7 @@
             {% for categoria in categorias %}
                 <div class="categoria">
                     {% if categoria.nombre_grupo in imagenes %}
-                        <img src="{{ url_for('static', filename='Imagenes/' ~ imagenes[categoria.nombre_grupo]) }}" alt="{{ categoria.nombre_grupo }}">
+                        <img src="{{ url_for('static', filename='Imagenes/' ~ imagenes.get(categoria.nombre_grupo)) }}" alt="{{ categoria.nombre_grupo }}">
                     {% else %}
                         <img src="{{ url_for('static', filename='Imagenes/default.jpg') }}" alt="Imagen por defecto">
                     {% endif %}
