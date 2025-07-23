@@ -2,34 +2,23 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Productos - Dunki Gatos</title>
+    <title>{{ categoria.nombre_grupo }} - Productos</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='productos.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="contenedor">
-        <h1>Selecciona un producto</h1>
-
-        {% set imagenes = {
-            'PLATO PRINCIPAL': 'plato-fuerte.jpg',
-            'BEBIDAS': 'bebidas.jpg',
-            'ACOMPAÑANTES': 'acompañantes.jpg'
-        } %}
-
-        {% for categoria in categorias %}
-            <h2 class="categoria">{{ categoria.nombre_grupo }}</h2>
-            <div class="grid-productos">
-                {% for producto in categoria.productos %}
-                    <div class="producto">
-                        <img src="{{ url_for('static', filename='Imagenes/' ~ imagenes[categoria.nombre_grupo]) }}" alt="{{ categoria.nombre_grupo }}">
-                        <h3>{{ producto.nom_producto }}</h3>
-                        <button class="btn-seleccionar">Seleccionar</button>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endfor %}
+        <h1>{{ categoria.nombre_grupo }}</h1>
+        <div class="grid-productos">
+            {% for producto in productos %}
+                <div class="producto">
+                    <img src="{{ url_for('static', filename='Imagenes/' ~ categoria.nombre_grupo|lower|replace(' ', '-') ~ '.jpg') }}" alt="{{ categoria.nombre_grupo }}">
+                    <h3>{{ producto.nom_producto }}</h3>
+                    <button class="btn-seleccionar">Seleccionar</button>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 </body>
 </html>
-
 

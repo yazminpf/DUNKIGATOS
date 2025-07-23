@@ -36,7 +36,7 @@ def login():
 
         usuario = Usuario.query.filter_by(correo=correo, password=password).first()
         if usuario:
-            return redirect(url_for("inicio"))  # Asegúrate de tener esta ruta o cámbiala
+            return redirect(url_for("ver_categorias"))  # Asegúrate de tener esta ruta o cámbiala
         else:
             return render_template("login.html", mensaje="❌ Credenciales incorrectas")
 
@@ -76,8 +76,8 @@ def ver_categorias():
 @app.route("/productos/categoria/<int:id_categoria>")
 def ver_productos_por_categoria(id_categoria):
     categoria = Categoria.query.get_or_404(id_categoria)
-    return render_template("productos.html", categorias=[categoria])
-
+    productos = categoria.productos  # Usa la relación definida en el modelo
+    return render_template("productos.html", categoria=categoria, productos=productos)
 
 # Ejecutar app
 if __name__ == "__main__":
