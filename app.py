@@ -76,8 +76,9 @@ def ver_categorias():
 @app.route("/productos/categoria/<int:id_categoria>")
 def ver_productos_por_categoria(id_categoria):
     categoria = Categoria.query.get_or_404(id_categoria)
-    productos = categoria.productos  
+    productos = categoria.productos
     return render_template("productos.html", categoria=categoria, productos=productos)
+
 
 # Ejecutar app
 if __name__ == "__main__":

@@ -1,54 +1,79 @@
+/* Base */
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+}
+
+/* Contenedor general */
 .contenedor {
+    width: 90%;
     max-width: 1000px;
     margin: 0 auto;
-    padding: 20px;
-    font-family: 'Montserrat', sans-serif;
-}
-
-.grid-categorias {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-}
-
-.categoria {
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    padding: 20px;
+    padding: 30px 20px;
     text-align: center;
-    width: 250px;
-    transition: transform 0.2s ease;
+}
+
+/* Título */
+h1 {
+    font-size: 32px;
+    margin-bottom: 40px;
+    color: #333;
+    font-weight: 600;
+}
+
+/* Grid de categorías */
+.grid-categorias {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+/* Tarjeta individual de categoría */
+.categoria {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: transform 0.2s ease-in-out;
 }
 
 .categoria:hover {
-    transform: scale(1.05);
+    transform: scale(1.03);
 }
 
+/* Imágenes */
 .categoria img {
     width: 100%;
-    height: auto;
-    border-radius: 8px;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 12px;
 }
 
+/* Título de cada categoría */
 .categoria h2 {
-    margin: 15px 0;
-    font-size: 1.2rem;
+    font-size: 20px;
+    margin: 10px 0;
+    color: #444;
+    font-weight: 600;
 }
 
+/* Botón */
 .btn-seleccionar {
-    background-color: #5E60CE;
-    color: white;
-    border: none;
+    display: inline-block;
     padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
+    background-color: #FF6B81;
+    color: white;
     text-decoration: none;
+    border-radius: 8px;
     font-weight: bold;
+    transition: background-color 0.2s ease;
+    font-size: 14px;
 }
 
 .btn-seleccionar:hover {
-    background-color: #4A4CCC;
+    background-color: #d94f67;
 }
 
