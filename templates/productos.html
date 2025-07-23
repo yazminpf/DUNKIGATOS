@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Productos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+    <h1>🛍️ Catálogo de Productos</h1>
+
+    {% for c in categoria %}
+        <h2>{{ c.nombre }}</h2>
+        <ul>
+            {% for p in producto %}
+                {% if p.categoria_id == c.id %}
+                    <li>{{ p.nombre }} - {{ p.descripcion }} - ${{ p.precio }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% endfor %}
+
+    <a href="{{ url_for('inicio') }}">⬅️ Volver al inicio</a>
+</body>
+</html>
