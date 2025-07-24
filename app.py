@@ -36,7 +36,7 @@ def login():
 
         usuario = Usuario.query.filter_by(correo=correo, password=password).first()
         if usuario:
-            return redirect(url_for("ver_categorias"))  # Asegúrate de tener esta ruta o cámbiala
+            return redirect(url_for("ver_categorias", "panel_admin"))  # Asegúrate de tener esta ruta o cámbiala
         else:
             return render_template("login.html", mensaje="❌ Credenciales incorrectas")
 
