@@ -11,8 +11,12 @@ class Usuario(db.Model):
     estado = db.Column(db.Boolean, default=True)
     fecha_registro = db.Column(db.DateTime, default=datetime.utcnow)
 
+    # ✅ Relación con roles a través de la tabla intermedia
+    roles = db.relationship("Rol", secondary="roles_usuario", backref="usuarios")
+
     def __repr__(self):
         return f'<Usuario {self.nombre} {self.apellido}>'
+
 class Rol(db.Model):
     __tablename__ = 'roles'
     id_rol = db.Column(db.Integer, primary_key=True)
@@ -35,8 +39,10 @@ class RolUsuario(db.Model):
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuarios.id_usuario'), primary_key=True)
     id_rol = db.Column(db.Integer, db.ForeignKey('roles.id_rol'), primary_key=True)
 
-#Tablas del producto y su jerarquia (categoria)
+    def __repr__(self):
+        return f'<RolUsuario Usuario:{self.id_usuario} Rol:{self.id_rol}>'
 
+# Tablas de productos y jerarquía de categorías
 class Categoria(db.Model):
     __tablename__ = 'categoria'
     id_categoria = db.Column(db.Integer, primary_key=True)

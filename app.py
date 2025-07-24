@@ -79,6 +79,30 @@ def ver_productos_por_categoria(id_categoria):
     productos = categoria.productos
     return render_template("productos.html", categoria=categoria, productos=productos)
 
+@app.route("/admin/usuarios")
+def admin_usuarios():
+    usuarios = Usuario.query.all()
+    roles = Rol.query.all()
+    return render_template("usuarios_admin.html", usuarios=usuarios, roles=roles)
+
+@app.route("/admin/asignar_rol/<int:usuario_id>", methods=["POST"])
+def asignar_rol(usuario_id):
+    nuevo_rol_id = request.form.get("rol_id")
+
+    # Verifica si ya tiene un rol asignado
+    rol_existente = RolUsuario.query.filter_by(id_usuario=usuario_id).first()
+
+    if rol_existente:
+        # Actualiza el rol existente
+        rol_existente.id_rol = nuevo_rol_id
+    else:
+        # Crea una nueva asignación de rol
+        nuevo_rol = RolUsuario(id_usuario=usuario_id, id_rol=nuevo_rol_id)
+        db.session.add(nuevo_rol)
+
+    db.session.commit()
+    return redirect(url_for("admin_usuarios"))
+
 
 # Ejecutar app
 if __name__ == "__main__":

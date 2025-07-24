@@ -1,0 +1,48 @@
+<!-- templates/usuarios_admin.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Usuarios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+<body>
+    <h1>Usuarios registrados</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Rol actual</th>
+                <th>Asignar Rol</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.id_usuario }}</td>
+                <td>{{ usuario.nombre }} {{ usuario.apellido }}</td>
+                <td>{{ usuario.correo }}</td>
+                <td>
+                    {% set rol_usuario = usuario.roles[0] if usuario.roles else None %}
+                    {{ rol_usuario.nombre_rol if rol_usuario else 'Sin rol' }}
+                </td>
+                <td>
+                    <form action="{{ url_for('asignar_rol', usuario_id=usuario.id_usuario) }}" method="POST">
+                        <select name="rol_id">
+                            {% for rol in roles %}
+                            <option value="{{ rol.id_rol }}">{{ rol.nombre_rol }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit">Asignar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('panel_admin') }}">Volver al Panel</a>
+</body>
+</html>
