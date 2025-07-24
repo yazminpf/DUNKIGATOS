@@ -79,7 +79,7 @@ def ver_productos_por_categoria(id_categoria):
     productos = categoria.productos
     return render_template("productos.html", categoria=categoria, productos=productos)
 
-@app.route("/admin/usuarios")
+@app.route("/usuarios_admin")
 def admin_usuarios():
     usuarios = Usuario.query.all()
     roles = Rol.query.all()
