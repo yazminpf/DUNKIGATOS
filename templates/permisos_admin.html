@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Permisos</title>
+</head>
+<body>
+    <h1>🛡️ Gestión de Permisos</h1>
+
+    {% if mensaje %}
+        <p>{{ mensaje }}</p>
+    {% endif %}
+
+    <!-- Formulario para crear nuevos permisos -->
+    <h2>➕ Crear nuevo permiso</h2>
+    <form method="POST">
+        <label>Nombre del permiso:</label>
+        <input type="text" name="nombre_permiso" required>
+        <br>
+        <label>Descripción:</label>
+        <input type="text" name="descripcion">
+        <br>
+        <button type="submit">Crear permiso</button>
+    </form>
+
+    <hr>
+
+    <!-- Formulario para asignar permisos a roles -->
+    <h2>🧩 Asignar permiso a rol</h2>
+    <form action="{{ url_for('asignar_permiso_a_rol') }}" method="POST">
+    <label for="id_rol">Rol:</label>
+    <select name="id_rol" required>
+        {% for rol in roles %}
+            <option value="{{ rol.id_rol }}">{{ rol.nombre_rol }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="id_permiso">Permiso:</label>
+    <select name="id_permiso" required>
+        {% for permiso in permisos %}
+            <option value="{{ permiso.id_permiso }}">{{ permiso.nombre_permiso }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Asignar permiso</button>
+</form>
+
+
+    <hr>
+
+    <!-- Tabla de permisos existentes -->
+    <h2>🔍 Permisos existentes</h2>
+    <ul>
+        {% for permiso in permisos %}
+            <li><strong>{{ permiso.nombre_permiso }}</strong>: {{ permiso.descripcion }}</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
+

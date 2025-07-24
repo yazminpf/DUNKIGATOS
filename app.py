@@ -36,7 +36,7 @@ def login():
 
         usuario = Usuario.query.filter_by(correo=correo, password=password).first()
         if usuario:
-            return redirect(url_for("ver_categorias", "panel_admin"))  # Asegúrate de tener esta ruta o cámbiala
+            return redirect(url_for("ver_categorias"))  # Asegúrate de tener esta ruta o cámbiala
         else:
             return render_template("login.html", mensaje="❌ Credenciales incorrectas")
 
@@ -107,6 +107,43 @@ def asignar_rol(usuario_id):
 @app.route("/admin/panel")
 def panel_admin():
     return render_template("panel_admin.html")
+
+@app.route("/admin/permisos", methods=["GET", "POST"])
+def admin_permisos():
+    from models import Rol  # Asegúrate de importar Rol
+
+    mensaje = None
+    if request.method == "POST":
+        nombre = request.form["nombre_permiso"]
+        descripcion = request.form["descripcion"]
+
+        if Permiso.query.filter_by(nombre_permiso=nombre).first():
+            mensaje = "❌ El permiso ya existe"
+        else:
+            db.session.add(Permiso(nombre_permiso=nombre, descripcion=descripcion))
+            db.session.commit()
+            mensaje = "✅ Permiso creado correctamente"
+
+    permisos = Permiso.query.all()
+    roles = Rol.query.all()
+    return render_template("permisos_admin.html", permisos=permisos, roles=roles, mensaje=mensaje)
+
+
+@app.route("/admin/asignar_permiso", methods=["POST"])
+def asignar_permiso_a_rol():
+    id_rol = request.form.get("id_rol")
+    id_permiso = request.form.get("id_permiso")
+
+    # Verifica si ya existe
+    from models import RolPermiso
+    existe = RolPermiso.query.filter_by(id_rol=id_rol, id_permiso=id_permiso).first()
+    if not existe:
+        nuevo = RolPermiso(id_rol=id_rol, id_permiso=id_permiso)
+        db.session.add(nuevo)
+        db.session.commit()
+
+    return redirect(url_for("admin_permisos"))
+
 
 
 # Ejecutar app
