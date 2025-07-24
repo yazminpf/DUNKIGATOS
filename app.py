@@ -79,11 +79,12 @@ def ver_productos_por_categoria(id_categoria):
     productos = categoria.productos
     return render_template("productos.html", categoria=categoria, productos=productos)
 
-@app.route("/usuarios_admin")
+@app.route("/admin/usuarios")
 def admin_usuarios():
     usuarios = Usuario.query.all()
     roles = Rol.query.all()
     return render_template("usuarios_admin.html", usuarios=usuarios, roles=roles)
+
 
 @app.route("/admin/asignar_rol/<int:usuario_id>", methods=["POST"])
 def asignar_rol(usuario_id):
@@ -102,6 +103,10 @@ def asignar_rol(usuario_id):
 
     db.session.commit()
     return redirect(url_for("admin_usuarios"))
+
+@app.route("/admin/panel")
+def panel_admin():
+    return render_template("panel_admin.html")
 
 
 # Ejecutar app
