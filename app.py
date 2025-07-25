@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from models import Usuario, Rol, Permiso, RolUsuario, Categoria, Producto
@@ -6,6 +6,9 @@ from database import db
 import os
 
 app = Flask(__name__)
+
+import secrets
+app.secret_key = secrets.token_hex(16)
 
 # Configuración de PostgreSQL
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "postgresql://postgres:Luc1995%2B@localhost/dunki_gatos_db")
@@ -36,11 +39,24 @@ def login():
 
         usuario = Usuario.query.filter_by(correo=correo, password=password).first()
         if usuario:
-            return redirect(url_for("ver_categorias"))  # Asegúrate de tener esta ruta o cámbiala
+            # Guardar ID del usuario en sesión
+            session["usuario_id"] = usuario.id_usuario
+
+            # Verificar si tiene rol "administrador"
+            if any(rol.nombre_rol == "administrador" for rol in usuario.roles):
+                return redirect(url_for("panel_admin"))
+            else:
+                return redirect(url_for("ver_categorias"))
         else:
             return render_template("login.html", mensaje="❌ Credenciales incorrectas")
 
     return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
 
 # Página de registro de usuario
 @app.route("/registro", methods=["GET", "POST"])
@@ -106,6 +122,14 @@ def asignar_rol(usuario_id):
 
 @app.route("/admin/panel")
 def panel_admin():
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+
+    usuario = Usuario.query.get(session["usuario_id"])
+
+    if not usuario or not any(rol.nombre_rol == "administrador" for rol in usuario.roles):
+        return abort(403)
+
     return render_template("panel_admin.html")
 
 @app.route("/admin/permisos", methods=["GET", "POST"])

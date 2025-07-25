@@ -12,7 +12,7 @@
     <div class="login-container">
         <img src="{{ url_for('static', filename='Imagenes/lobby.jpg') }}" alt="Logo Dunki Gatos" class="logo-login">
 
-        <form method="POST" action="/inicio" class="formulario-login">
+        <form method="POST" action="{{ url_for('login') }}" class="formulario-login">
             {% if mensaje %}
                 <p class="mensaje-error">{{ mensaje }}</p>
             {% endif %}
@@ -28,7 +28,7 @@
 
     
     </div>
-    <a href="{{ url_for('panel_admin') }}">Ingresar al panel</a>
+    <a href="{{ url_for('panel_admin') }}">Volver al Panel</a>
 </body>
 </html>
 
