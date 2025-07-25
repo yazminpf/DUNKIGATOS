@@ -4,6 +4,7 @@ from sqlalchemy import text
 from models import Usuario, Rol, Permiso, RolUsuario, Categoria, Producto
 from database import db
 import os
+from functools import wraps
 
 app = Flask(__name__)
 
@@ -66,6 +67,10 @@ def registro():
         apellido = request.form["apellido"]
         correo = request.form["correo"]
         password = request.form["password"]
+        confirmar = request.form["confirmar"]
+
+        if password != confirmar:
+            return render_template("registro.html", mensaje="❌ Las contraseñas no coinciden")
 
         usuario_existente = Usuario.query.filter_by(correo=correo).first()
         if usuario_existente:
@@ -95,7 +100,22 @@ def ver_productos_por_categoria(id_categoria):
     productos = categoria.productos
     return render_template("productos.html", categoria=categoria, productos=productos)
 
+
+def solo_admins(f):
+    @wraps(f)
+    def decorada(*args, **kwargs):
+        if "usuario_id" not in session:
+            return redirect(url_for("login"))
+
+        usuario = Usuario.query.get(session["usuario_id"])
+        if not usuario or not any(rol.nombre_rol == "administrador" for rol in usuario.roles):
+            return abort(403)
+
+        return f(*args, **kwargs)
+    return decorada
+
 @app.route("/admin/usuarios")
+@solo_admins
 def admin_usuarios():
     usuarios = Usuario.query.all()
     roles = Rol.query.all()
@@ -133,6 +153,7 @@ def panel_admin():
     return render_template("panel_admin.html")
 
 @app.route("/admin/permisos", methods=["GET", "POST"])
+@solo_admins
 def admin_permisos():
     from models import Rol  # Asegúrate de importar Rol
 
@@ -154,6 +175,7 @@ def admin_permisos():
 
 
 @app.route("/admin/asignar_permiso", methods=["POST"])
+@solo_admins
 def asignar_permiso_a_rol():
     id_rol = request.form.get("id_rol")
     id_permiso = request.form.get("id_permiso")
