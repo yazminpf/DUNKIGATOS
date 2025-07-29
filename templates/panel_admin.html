@@ -8,7 +8,6 @@
 <body class="bg-light">
 
     <!-- Barra superior -->
-    <!-- Barra superior -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <span class="navbar-brand">Panel de Administración</span>
@@ -19,7 +18,6 @@
             </div>
         </div>
     </nav>
-
 
     <!-- Contenido -->
     <div class="container mt-5">
@@ -32,8 +30,12 @@
             <a href="{{ url_for('ver_categorias') }}" class="list-group-item list-group-item-action">
                 📂 Gestión de Categorías
             </a>
-            <a href="/admin/productos" class="list-group-item list-group-item-action">
+            <a href="{{ url_for('admin_productos') }}" class="list-group-item list-group-item-action">
                 🛒 Gestión de Productos
+            </a>
+            <!-- Botón adicional para crear productos -->
+            <a href="{{ url_for('crear_producto') }}" class="list-group-item list-group-item-action text-success">
+                ➕ Crear nuevo Producto
             </a>
         </div>
     </div>

@@ -17,7 +17,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Inicializar la base de datos con la app
 db.init_app(app)
- 
+
 # Probar conexión
 def probar_conexion():
     try:
@@ -25,6 +25,20 @@ def probar_conexion():
         print("✅ Conexión a PostgreSQL exitosa")
     except Exception as e:
         print("❌ Error al conectar con PostgreSQL:", e)
+
+# Decorador para restringir acceso solo a administradores
+def solo_admins(f):
+    @wraps(f)
+    def decorada(*args, **kwargs):
+        if "usuario_id" not in session:
+            return redirect(url_for("login"))
+
+        usuario = Usuario.query.get(session["usuario_id"])
+        if not usuario or not any(rol.nombre_rol == "administrador" for rol in usuario.roles):
+            return abort(403)
+
+        return f(*args, **kwargs)
+    return decorada
 
 # Página principal
 @app.route("/")
@@ -40,11 +54,9 @@ def login():
 
         usuario = Usuario.query.filter_by(correo=correo, password=password).first()
         if usuario:
-            # Guardar datos del usuario en sesión
             session["usuario_id"] = usuario.id_usuario
             session["nombre_usuario"] = f"{usuario.nombre} {usuario.apellido}"
 
-            # Verificar si tiene rol "administrador"
             if any(rol.nombre_rol == "administrador" for rol in usuario.roles):
                 return redirect(url_for("panel_admin"))
             else:
@@ -58,7 +70,6 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for("login"))
-
 
 # Página de registro de usuario
 @app.route("/registro", methods=["GET", "POST"])
@@ -77,13 +88,7 @@ def registro():
         if usuario_existente:
             return render_template("registro.html", mensaje="❌ El correo ya está registrado")
 
-        nuevo_usuario = Usuario(
-            nombre=nombre,
-            apellido=apellido,
-            correo=correo,
-            password=password
-        )
-
+        nuevo_usuario = Usuario(nombre=nombre, apellido=apellido, correo=correo, password=password)
         db.session.add(nuevo_usuario)
         db.session.commit()
         return render_template("registro.html", mensaje="✅ Usuario registrado correctamente")
@@ -101,20 +106,6 @@ def ver_productos_por_categoria(id_categoria):
     productos = categoria.productos
     return render_template("productos.html", categoria=categoria, productos=productos)
 
-
-def solo_admins(f):
-    @wraps(f)
-    def decorada(*args, **kwargs):
-        if "usuario_id" not in session:
-            return redirect(url_for("login"))
-
-        usuario = Usuario.query.get(session["usuario_id"])
-        if not usuario or not any(rol.nombre_rol == "administrador" for rol in usuario.roles):
-            return abort(403)
-
-        return f(*args, **kwargs)
-    return decorada
-
 @app.route("/admin/usuarios")
 @solo_admins
 def admin_usuarios():
@@ -122,42 +113,26 @@ def admin_usuarios():
     roles = Rol.query.all()
     return render_template("usuarios_admin.html", usuarios=usuarios, roles=roles)
 
-
 @app.route("/admin/asignar_rol/<int:usuario_id>", methods=["POST"])
 def asignar_rol(usuario_id):
     nuevo_rol_id = request.form.get("rol_id")
-
-    # Verifica si ya tiene un rol asignado
     rol_existente = RolUsuario.query.filter_by(id_usuario=usuario_id).first()
-
     if rol_existente:
-        # Actualiza el rol existente
         rol_existente.id_rol = nuevo_rol_id
     else:
-        # Crea una nueva asignación de rol
         nuevo_rol = RolUsuario(id_usuario=usuario_id, id_rol=nuevo_rol_id)
         db.session.add(nuevo_rol)
-
     db.session.commit()
     return redirect(url_for("admin_usuarios"))
 
 @app.route("/admin/panel")
+@solo_admins
 def panel_admin():
-    if "usuario_id" not in session:
-        return redirect(url_for("login"))
-
-    usuario = Usuario.query.get(session["usuario_id"])
-
-    if not usuario or not any(rol.nombre_rol == "administrador" for rol in usuario.roles):
-        return abort(403)
-
     return render_template("panel_admin.html")
 
 @app.route("/admin/permisos", methods=["GET", "POST"])
 @solo_admins
 def admin_permisos():
-    from models import Rol  # Asegúrate de importar Rol
-
     mensaje = None
     if request.method == "POST":
         nombre = request.form["nombre_permiso"]
@@ -174,14 +149,12 @@ def admin_permisos():
     roles = Rol.query.all()
     return render_template("permisos_admin.html", permisos=permisos, roles=roles, mensaje=mensaje)
 
-
 @app.route("/admin/asignar_permiso", methods=["POST"])
 @solo_admins
 def asignar_permiso_a_rol():
     id_rol = request.form.get("id_rol")
     id_permiso = request.form.get("id_permiso")
 
-    # Verifica si ya existe
     from models import RolPermiso
     existe = RolPermiso.query.filter_by(id_rol=id_rol, id_permiso=id_permiso).first()
     if not existe:
@@ -192,10 +165,8 @@ def asignar_permiso_a_rol():
     return redirect(url_for("admin_permisos"))
 
 @app.route("/admin/productos")
+@solo_admins
 def admin_productos():
-    if "usuario_id" not in session:
-        return redirect(url_for("login"))
-
     productos = Producto.query.all()
     categorias = Categoria.query.all()
     return render_template("admin_productos.html", productos=productos, categorias=categorias)
@@ -221,12 +192,10 @@ def crear_producto():
     categorias = Categoria.query.all()
     return render_template("crear_producto.html", categorias=categorias)
 
-
 # Ejecutar app
 if __name__ == "__main__":
     with app.app_context():
         probar_conexion()
-        
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
