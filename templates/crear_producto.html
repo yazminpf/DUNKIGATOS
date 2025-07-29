@@ -15,29 +15,32 @@
         <form method="POST">
             <div class="mb-3">
                 <label for="nom_producto" class="form-label">Nombre del producto</label>
-                <input type="text" class="form-control" id="nom_producto" name="nom_producto" required>
+                <input type="text" class="form-control" name="nom_producto" required>
             </div>
 
             <div class="mb-3">
                 <label for="descripcion" class="form-label">Descripción</label>
-                <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+                <textarea class="form-control" name="descripcion" rows="3" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="valor_producto" class="form-label">Valor del producto</label>
+                <input type="number" class="form-control" name="valor_producto" required>
             </div>
 
             <div class="mb-3">
                 <label for="id_categoria" class="form-label">Categoría</label>
-                <select class="form-select" id="id_categoria" name="id_categoria" required>
-                    <option value="" disabled selected>Seleccione una categoría</option>
+                <select class="form-control" name="id_categoria" required>
                     {% for cat in categorias %}
                         <option value="{{ cat.id_categoria }}">{{ cat.nombre_grupo }}</option>
                     {% endfor %}
                 </select>
             </div>
 
-            <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-success">✅ Crear producto</button>
-                <a href="{{ url_for('admin_productos') }}" class="btn btn-outline-secondary">🔙 Cancelar</a>
-            </div>
+            <button type="submit" class="btn btn-success">Crear producto</button>
+            <a href="{{ url_for('admin_productos') }}" class="btn btn-secondary">Cancelar</a>
         </form>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
