@@ -40,8 +40,9 @@ def login():
 
         usuario = Usuario.query.filter_by(correo=correo, password=password).first()
         if usuario:
-            # Guardar ID del usuario en sesión
+            # Guardar datos del usuario en sesión
             session["usuario_id"] = usuario.id_usuario
+            session["nombre_usuario"] = f"{usuario.nombre} {usuario.apellido}"
 
             # Verificar si tiene rol "administrador"
             if any(rol.nombre_rol == "administrador" for rol in usuario.roles):
