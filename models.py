@@ -61,5 +61,14 @@ class Producto(db.Model):
     valor_producto = db.Column(db.Integer, nullable=False)
     estado_producto = db.Column(db.Boolean, default=True)
 
+    class RolPermiso(db.Model):
+     __tablename__ = 'roles_permisos'  
+     id_rol = db.Column(db.Integer, db.ForeignKey('roles.id_rol'), primary_key=True)
+     id_permiso = db.Column(db.Integer, db.ForeignKey('permisos.id_permiso'), primary_key=True)
+  
+    def __repr__(self):
+        return f'<RolPermiso Rol:{self.id_rol} Permiso:{self.id_permiso}>'
+
+
     def __repr__(self):
         return f'<Producto {self.nom_producto}>'
