@@ -30,7 +30,9 @@
                                 <span class="text-danger">Inactivo</span>
                             {% endif %}
                         </p>
-                        <a href="{{ url_for('editar_producto', id=producto.id_producto) }}" class="btn btn-primary btn-sm">Editar</a>
+                        <!-- Botón de editar desactivado temporalmente
+                        <a href="{{ url_for('editar_producto', id_producto=producto.id_producto) }}" class="btn btn-warning btn-sm">Editar</a>
+                        -->
                         <a href="{{ url_for('eliminar_producto', id=producto.id_producto) }}" class="btn btn-danger btn-sm">Eliminar</a>
                         <a href="{{ url_for('cambiar_estado_producto', id=producto.id_producto) }}" class="btn btn-warning btn-sm">
                             {% if producto.activo %}Desactivar{% else %}Activar{% endif %}
