@@ -176,16 +176,16 @@ def admin_productos():
 def crear_producto():
     if request.method == "POST":
         nom_producto = request.form["nom_producto"]
-        descripcion = request.form["descripcion"]
-        valor_producto = request.form["valor_producto"]
-        id_categoria = request.form["id_categoria"]
+        valor_producto = int(request.form["valor_producto"])
+        id_categoria = int(request.form["id_categoria"])
+
+        print("💾 Creando producto:", nom_producto, valor_producto, id_categoria)
 
         nuevo = Producto(
             nom_producto=nom_producto,
-            descripcion=descripcion,
             valor_producto=valor_producto,
             id_categoria=id_categoria,
-            activo=True
+            estado_producto=True
         )
         db.session.add(nuevo)
         db.session.commit()
