@@ -177,11 +177,13 @@ def crear_producto():
     if request.method == "POST":
         nom_producto = request.form["nom_producto"]
         descripcion = request.form["descripcion"]
+        valor_producto = request.form["valor_producto"]
         id_categoria = request.form["id_categoria"]
 
         nuevo = Producto(
             nom_producto=nom_producto,
             descripcion=descripcion,
+            valor_producto=valor_producto,
             id_categoria=id_categoria,
             activo=True
         )
@@ -191,6 +193,24 @@ def crear_producto():
 
     categorias = Categoria.query.all()
     return render_template("crear_producto.html", categorias=categorias)
+
+@app.route("/admin/productos/editar/<int:id_producto>", methods=["GET", "POST"])
+@solo_admins
+def editar_producto(id_producto):
+    producto = Producto.query.get_or_404(id_producto)
+    categorias = Categoria.query.all()
+
+    if request.method == "POST":
+        producto.nom_producto = request.form["nom_producto"]
+        producto.descripcion = request.form["descripcion"]
+        producto.valor_producto = request.form["valor_producto"]
+        producto.id_categoria = request.form["id_categoria"]
+
+        db.session.commit()
+        return redirect(url_for("admin_productos"))
+
+    return render_template("editar_producto.html", producto=producto, categorias=categorias)
+
 
 # Ejecutar app
 if __name__ == "__main__":
