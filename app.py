@@ -202,7 +202,6 @@ def editar_producto(id_producto):
 
     if request.method == "POST":
         producto.nom_producto = request.form["nom_producto"]
-        producto.descripcion = request.form["descripcion"]
         producto.valor_producto = request.form["valor_producto"]
         producto.id_categoria = request.form["id_categoria"]
 
