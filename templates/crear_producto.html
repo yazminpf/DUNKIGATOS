@@ -19,11 +19,6 @@
             </div>
 
             <div class="mb-3">
-                <label for="descripcion" class="form-label">Descripción</label>
-                <textarea class="form-control" name="descripcion" rows="3" required></textarea>
-            </div>
-
-            <div class="mb-3">
                 <label for="valor_producto" class="form-label">Valor del producto</label>
                 <input type="number" class="form-control" name="valor_producto" required>
             </div>
@@ -37,9 +32,9 @@
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-success">Crear producto</button>
-            <a href="{{ url_for('admin_productos') }}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Guardar</button>
         </form>
+
 
     </div>
 
