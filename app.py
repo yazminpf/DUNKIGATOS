@@ -191,6 +191,35 @@ def asignar_permiso_a_rol():
 
     return redirect(url_for("admin_permisos"))
 
+@app.route("/admin/productos")
+def admin_productos():
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+
+    productos = Producto.query.all()
+    categorias = Categoria.query.all()
+    return render_template("admin_productos.html", productos=productos, categorias=categorias)
+
+@app.route("/admin/productos/crear", methods=["GET", "POST"])
+@solo_admins
+def crear_producto():
+    if request.method == "POST":
+        nom_producto = request.form["nom_producto"]
+        descripcion = request.form["descripcion"]
+        id_categoria = request.form["id_categoria"]
+
+        nuevo = Producto(
+            nom_producto=nom_producto,
+            descripcion=descripcion,
+            id_categoria=id_categoria,
+            activo=True
+        )
+        db.session.add(nuevo)
+        db.session.commit()
+        return redirect(url_for("admin_productos"))
+
+    categorias = Categoria.query.all()
+    return render_template("crear_producto.html", categorias=categorias)
 
 
 # Ejecutar app
