@@ -89,11 +89,12 @@ class DetalleFactura(db.Model):
     __tablename__ = "detalle_factura"
     id_detalle = db.Column(db.Integer, primary_key=True)
     id_factura = db.Column(db.Integer, db.ForeignKey("factura.id_factura"), nullable=False)
-    id_producto = db.Column(db.Integer, db.ForeignKey("productos.id_grupo_producto"), nullable=False)
+    id_grupo_producto = db.Column(db.Integer, db.ForeignKey("productos.id_grupo_producto"), nullable=False)
     cantidad = db.Column(db.Integer, nullable=False)
     subtotal = db.Column(db.Integer, nullable=False)
 
     producto = db.relationship("Producto", backref="detalles")
 
     def __repr__(self):
-        return f"<DetalleFactura Producto:{self.id_producto} Cantidad:{self.cantidad}>"
+        return f"<DetalleFactura Producto:{self.id_grupo_producto} Cantidad:{self.cantidad}>"
+
