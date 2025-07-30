@@ -1,39 +1,49 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const cantidades = document.querySelectorAll(".cantidad");
-    const totalElement = document.getElementById("total");
-    const form = document.getElementById("facturaForm");
+    console.log("📦 JS cargado");
 
-    cantidades.forEach(input => {
-        input.addEventListener("input", actualizarTotales);
-    });
+    const form = document.getElementById("facturaForm");
+    const totalElement = document.getElementById("total");
 
     function actualizarTotales() {
         let total = 0;
+
         document.querySelectorAll("tbody tr").forEach(fila => {
             const precio = parseFloat(fila.querySelector(".precio").value);
-            const cantidad = parseInt(fila.querySelector(".cantidad").value) || 0;
+            const cantidadInput = fila.querySelector(".cantidad");
+            const cantidad = parseInt(cantidadInput.value) || 0;
             const subtotal = precio * cantidad;
+
+            // Debug
+            console.log(`Producto ID: ${fila.dataset.id}, Precio: ${precio}, Cantidad: ${cantidad}, Subtotal: ${subtotal}`);
+
             fila.querySelector(".subtotal").textContent = `$${subtotal}`;
             total += subtotal;
         });
+
         totalElement.textContent = `$${total}`;
+        console.log("💰 Total actualizado:", total);
     }
+
+    // Asignar evento a cada input .cantidad (esto va después de definir la función)
+    document.querySelectorAll(".cantidad").forEach(input => {
+        input.addEventListener("input", actualizarTotales);
+    });
 
     form.addEventListener("submit", function (e) {
         e.preventDefault();
 
         let productosSeleccionados = [];
 
-        document.querySelectorAll("tbody tr").forEach((fila, index) => {
+        document.querySelectorAll("tbody tr").forEach(fila => {
             const id = parseInt(fila.getAttribute("data-id"));
             const precio = parseFloat(fila.querySelector(".precio").value);
-            const cantidad = parseInt(fila.querySelector(".cantidad").value);
+            const cantidad = parseInt(fila.querySelector(".cantidad").value) || 0;
 
             if (cantidad > 0) {
                 productosSeleccionados.push({
                     id_grupo_producto: id,
                     cantidad: cantidad,
-                    subtotal: cantidad * precio
+                    subtotal: precio * cantidad
                 });
             }
         });
@@ -46,10 +56,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-            productos: productosSeleccionados,
-            total: total
-        })
-
+                productos: productosSeleccionados,
+                total: total
+            })
         })
         .then(res => res.json())
         .then(data => {
@@ -62,4 +71,3 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-
