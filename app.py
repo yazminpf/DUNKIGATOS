@@ -5,6 +5,7 @@ from models import Usuario, Rol, Permiso, RolUsuario, Categoria, Producto, Factu
 from database import db
 import os
 from functools import wraps
+from flask import jsonify 
 
 app = Flask(__name__)
 
@@ -212,18 +213,48 @@ def editar_producto(id_producto):
 
 @app.route("/facturar", methods=["GET", "POST"])
 def facturar():
-    productos = Producto.query.filter_by(estado_producto=True).all()
-    return render_template("facturacion.html", productos=productos)
+    if request.method == "GET":
+        productos = Producto.query.filter_by(estado_producto=True).all()
+        return render_template("facturacion.html", productos=productos)
+
+    if request.method == "POST":
+        data = request.get_json()
+        productos = data.get("productos", [])
+        total = data.get("total", 0)
+
+        if not productos or total <= 0:
+            return jsonify({"mensaje": "❌ Datos inválidos"}), 400
+
+        # Usa el usuario actual si ha iniciado sesión, o None si no
+        id_usuario = session.get("usuario_id")
+
+        factura = Factura(total=total, id_usuario=id_usuario)
+        db.session.add(factura)
+        db.session.commit()
+
+        for item in productos:
+            detalle = DetalleFactura(
+                id_factura=factura.id_factura,
+                id_producto=item["id_grupo_producto"],  # 👈 este es el cambio
+                cantidad=item["cantidad"],
+                subtotal=item["subtotal"]
+            )
+            db.session.add(detalle)
+
+
+        db.session.commit()
+
+        return jsonify({"mensaje": "✅ Factura registrada correctamente", "id_factura": factura.id_factura}), 200
 
 # Ruta temporal para crear tablas en producción
-@app.route("/crear_tablas")
-def crear_tablas():
-    try:
-        with app.app_context():
-            db.create_all()
-        return "✅ Tablas creadas correctamente en la base de datos"
-    except Exception as e:
-        return f"❌ Error al crear las tablas: {str(e)}"
+#@app.route("/crear_tablas")
+#def crear_tablas():
+    #try:
+       # with app.app_context():
+            #db.create_all()
+        #return "✅ Tablas creadas correctamente en la base de datos"
+    #except Exception as e:
+        #return f"❌ Error al crear las tablas: {str(e)}"
 
 # Ejecutar app
 if __name__ == "__main__":

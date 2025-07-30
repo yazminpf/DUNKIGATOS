@@ -12,7 +12,7 @@
 
     <form id="facturaForm">
         <table class="table table-bordered table-striped">
-            <thead>
+            <thead class="table-dark">
                 <tr>
                     <th>Producto</th>
                     <th>Valor</th>
@@ -22,7 +22,7 @@
             </thead>
             <tbody>
                 {% for producto in productos %}
-                <tr>
+                <tr data-id="{{ producto.id_grupo_producto }}">
                     <td>{{ producto.nom_producto }}</td>
                     <td>
                         <input type="hidden" class="precio" value="{{ producto.valor_producto }}">
@@ -37,40 +37,14 @@
             </tbody>
         </table>
 
-        <div class="mt-4">
+        <div class="mt-4 d-flex justify-content-between align-items-center">
             <h4>Total: <span id="total">$0</span></h4>
             <button type="submit" class="btn btn-primary">Confirmar Factura</button>
         </div>
     </form>
 </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const cantidades = document.querySelectorAll(".cantidad");
-    const totalElement = document.getElementById("total");
-
-    cantidades.forEach(input => {
-        input.addEventListener("input", actualizarTotales);
-    });
-
-    function actualizarTotales() {
-        let total = 0;
-        document.querySelectorAll("tbody tr").forEach(fila => {
-            const precio = parseFloat(fila.querySelector(".precio").value);
-            const cantidad = parseInt(fila.querySelector(".cantidad").value) || 0;
-            const subtotal = precio * cantidad;
-            fila.querySelector(".subtotal").textContent = `$${subtotal}`;
-            total += subtotal;
-        });
-        totalElement.textContent = `$${total}`;
-    }
-
-    document.getElementById("facturaForm").addEventListener("submit", function (e) {
-        e.preventDefault();
-        alert("✅ Factura generada. Total: " + totalElement.textContent);
-    });
-});
-</script>
+<script src="{{ url_for('static', filename='js/facturacion.js') }}"></script>
 
 </body>
 </html>
