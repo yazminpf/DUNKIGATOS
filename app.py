@@ -235,7 +235,7 @@ def facturar():
         for item in productos:
             detalle = DetalleFactura(
                 id_factura=factura.id_factura,
-                id_producto=item["id_grupo_producto"],  # 👈 este es el cambio
+                id_grupo_producto=item["id_grupo_producto"], 
                 cantidad=item["cantidad"],
                 subtotal=item["subtotal"]
             )
