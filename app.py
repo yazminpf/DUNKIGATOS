@@ -215,6 +215,16 @@ def facturar():
     productos = Producto.query.filter_by(estado_producto=True).all()
     return render_template("facturacion.html", productos=productos)
 
+# Ruta temporal para crear tablas en producción
+@app.route("/crear_tablas")
+def crear_tablas():
+    try:
+        with app.app_context():
+            db.create_all()
+        return "✅ Tablas creadas correctamente en la base de datos"
+    except Exception as e:
+        return f"❌ Error al crear las tablas: {str(e)}"
+
 # Ejecutar app
 if __name__ == "__main__":
     with app.app_context():
@@ -223,13 +233,3 @@ if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-
-        
-
-
-
-
-
-
-
-
