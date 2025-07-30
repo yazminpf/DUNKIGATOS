@@ -24,7 +24,7 @@ class Rol(db.Model):
 
     def __repr__(self):
         return f'<Rol {self.nombre_rol}>'
-
+    
 class Permiso(db.Model):
     __tablename__ = 'permisos'
     id_permiso = db.Column(db.Integer, primary_key=True)
@@ -33,6 +33,15 @@ class Permiso(db.Model):
 
     def __repr__(self):
         return f'<Permiso {self.nombre_permiso}>'
+
+class RolPermiso(db.Model):
+    __tablename__ = 'roles_permisos'
+    id_rol = db.Column(db.Integer, db.ForeignKey('roles.id_rol'), primary_key=True)
+    id_permiso = db.Column(db.Integer, db.ForeignKey('permisos.id_permiso'), primary_key=True)
+
+    def __repr__(self):
+        return f'<RolPermiso Rol:{self.id_rol} Permiso:{self.id_permiso}>'
+
 
 class RolUsuario(db.Model):
     __tablename__ = 'roles_usuario'
@@ -61,14 +70,30 @@ class Producto(db.Model):
     valor_producto = db.Column(db.Integer, nullable=False)
     estado_producto = db.Column(db.Boolean, default=True)
 
-    class RolPermiso(db.Model):
-     __tablename__ = 'roles_permisos'  
-     id_rol = db.Column(db.Integer, db.ForeignKey('roles.id_rol'), primary_key=True)
-     id_permiso = db.Column(db.Integer, db.ForeignKey('permisos.id_permiso'), primary_key=True)
-  
-    def __repr__(self):
-        return f'<RolPermiso Rol:{self.id_rol} Permiso:{self.id_permiso}>'
-
-
     def __repr__(self):
         return f'<Producto {self.nom_producto}>'
+
+class Factura(db.Model):
+    __tablename__ = "factura"
+    id_factura = db.Column(db.Integer, primary_key=True)
+    fecha = db.Column(db.DateTime, default=datetime.utcnow)
+    total = db.Column(db.Integer, nullable=False)
+    id_usuario = db.Column(db.Integer, db.ForeignKey('usuarios.id_usuario'))
+
+    detalles = db.relationship("DetalleFactura", backref="factura", cascade="all, delete")
+
+    def __repr__(self):
+        return f"<Factura {self.id_factura} - Total: {self.total}>"
+
+class DetalleFactura(db.Model):
+    __tablename__ = "detalle_factura"
+    id_detalle = db.Column(db.Integer, primary_key=True)
+    id_factura = db.Column(db.Integer, db.ForeignKey("factura.id_factura"), nullable=False)
+    id_producto = db.Column(db.Integer, db.ForeignKey("productos.id_grupo_producto"), nullable=False)
+    cantidad = db.Column(db.Integer, nullable=False)
+    subtotal = db.Column(db.Integer, nullable=False)
+
+    producto = db.relationship("Producto", backref="detalles")
+
+    def __repr__(self):
+        return f"<DetalleFactura Producto:{self.id_producto} Cantidad:{self.cantidad}>"

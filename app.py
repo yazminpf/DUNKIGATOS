@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
-from models import Usuario, Rol, Permiso, RolUsuario, Categoria, Producto
+from models import Usuario, Rol, Permiso, RolUsuario, Categoria, Producto, Factura, DetalleFactura
 from database import db
 import os
 from functools import wraps
@@ -210,11 +210,16 @@ def editar_producto(id_producto):
 
     return render_template("editar_producto.html", producto=producto, categorias=categorias)
 
+@app.route("/facturar", methods=["GET", "POST"])
+def facturar():
+    productos = Producto.query.filter_by(estado_producto=True).all()
+    return render_template("facturacion.html", productos=productos)
 
 # Ejecutar app
 if __name__ == "__main__":
     with app.app_context():
         probar_conexion()
+        db.create_all()
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
