@@ -13,7 +13,7 @@ import secrets
 app.secret_key = secrets.token_hex(16)
 
 # Configuración de PostgreSQL
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("set DATABASE_URL=postgresql://neondb_owner:npg_sNmwQd23gCnt@ep-super-bar-aey4i11n-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "postgresql://postgres:Luc1995%2B@localhost/dunki_gatos_db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Inicializar la base de datos con la app
