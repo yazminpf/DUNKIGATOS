@@ -13,7 +13,7 @@ import secrets
 app.secret_key = secrets.token_hex(16)
 
 # Configuración de PostgreSQL
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "postgresql://postgres:Luc1995%2B@localhost/dunki_gatos_db")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("set DATABASE_URL=postgresql://neondb_owner:npg_sNmwQd23gCnt@ep-super-bar-aey4i11n-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Inicializar la base de datos con la app
@@ -247,16 +247,16 @@ def facturar():
         return jsonify({"mensaje": "✅ Factura registrada correctamente", "id_factura": factura.id_factura}), 200
 
 # Ruta temporal para crear tablas en producción
-#@app.route("/crear_tablas")
-#def crear_tablas():
-    #try:
-       # with app.app_context():
-            #db.create_all()
-        #return "✅ Tablas creadas correctamente en la base de datos"
-    #except Exception as e:
-        #return f"❌ Error al crear las tablas: {str(e)}"
+@app.route("/crear_tablas")
+def crear_tablas():
+    try:
+        with app.app_context():
+            db.create_all()
+        return "✅ Tablas creadas correctamente en la base de datos Neon"
+    except Exception as e:
+        return f"❌ Error al crear las tablas: {str(e)}"
 
-# Ejecutar app
+
 if __name__ == "__main__":
     with app.app_context():
         probar_conexion()
