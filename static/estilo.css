@@ -50,22 +50,31 @@
 
 
 .lado-derecho {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px; /* Espaciado entre botones */
 }
 
 .imagen-fondo {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover; 
-  z-index: 1;
-  filter: brightness(0.85); 
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    filter: brightness(0.85);
 }
 
+.lado-derecho > *:not(.imagen-fondo) {
+    position: relative;
+    z-index: 2;
+}
 
 .btn-inicio {
   position: absolute;
@@ -139,4 +148,49 @@ footer img {
   z-index: 2;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.btn-registro, .btn-inicio, .btn-primary {
+    position: relative; /* quitar absolute */
+    transform: none; /* quitar el translate */
+    top: auto;
+    left: auto;
+    width: auto;
+}
+
+@media (max-width: 768px) {
+    .contenedor {
+        flex-direction: column;
+    }
+
+    .lado-izquierdo, .lado-derecho {
+        width: 100%;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .btn-registro, .btn-inicio, .btn-primary {
+        width: 90%;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1.titulo {
+        font-size: 1.8rem;
+    }
+
+    h2.subtitulo {
+        font-size: 1.2rem;
+    }
+
+    p.descripcion {
+        font-size: 0.95rem;
+    }
+
+    .btn-registro, .btn-inicio, .btn-primary {
+        width: 100%;
+        font-size: 1rem;
+        padding: 12px;
+    }
 }
