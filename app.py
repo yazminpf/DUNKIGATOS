@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
-from models import Usuario, Rol, Permiso, RolUsuario, Categoria, Producto, Factura, DetalleFactura
+from models import Usuario, Rol, Permiso, RolUsuario, RolPermiso, Categoria, Producto, Factura, DetalleFactura
 from database import db
 import os
 from functools import wraps
@@ -57,6 +57,15 @@ def login():
         if usuario:
             session["usuario_id"] = usuario.id_usuario
             session["nombre_usuario"] = f"{usuario.nombre} {usuario.apellido}"
+
+            permisos = []
+            for rol in usuario.roles:
+                for rp in RolPermiso.query.filter_by(id_rol=rol.id_rol).all():
+                    permiso = Permiso.query.get(rp.id_permiso)
+                    if permiso:
+                        permisos.append(permiso.nombre_permiso)
+
+            session["permisos"] = permisos
 
             if any(rol.nombre_rol == "administrador" for rol in usuario.roles):
                 return redirect(url_for("panel_admin"))
@@ -216,6 +225,9 @@ def facturar():
     if request.method == "GET":
         productos = Producto.query.filter_by(estado_producto=True).all()
         return render_template("facturacion.html", productos=productos)
+    
+    if "permisos" not in session or "crear_factura" not in session["permisos"]:
+            return jsonify({"mensaje": "❌ No tienes permisos para crear facturas"}), 403
 
     if request.method == "POST":
         data = request.get_json()
@@ -244,7 +256,7 @@ def facturar():
 
         db.session.commit()
 
-        return jsonify({"mensaje": "✅ Factura registrada correctamente", "id_factura": factura.id_factura}), 200
+    return jsonify({"mensaje": "✅ Factura registrada correctamente", "id_factura": factura.id_factura}), 200
 
 # Ruta temporal para crear tablas en producción
 @app.route("/crear_tablas")
