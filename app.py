@@ -225,11 +225,12 @@ def facturar():
     if request.method == "GET":
         productos = Producto.query.filter_by(estado_producto=True).all()
         return render_template("facturacion.html", productos=productos)
-    
-    if "permisos" not in session or "crear_factura" not in session["permisos"]:
-            return jsonify({"mensaje": "❌ No tienes permisos para crear facturas"}), 403
 
     if request.method == "POST":
+        # ✅ Verificar permisos aquí
+        if "permisos" not in session or "crear_factura" not in session["permisos"]:
+            return jsonify({"mensaje": "❌ No tienes permisos para crear facturas"}), 403
+
         data = request.get_json()
         productos = data.get("productos", [])
         total = data.get("total", 0)
@@ -237,7 +238,6 @@ def facturar():
         if not productos or total <= 0:
             return jsonify({"mensaje": "❌ Datos inválidos"}), 400
 
-        # Usa el usuario actual si ha iniciado sesión, o None si no
         id_usuario = session.get("usuario_id")
 
         factura = Factura(total=total, id_usuario=id_usuario)
@@ -253,10 +253,9 @@ def facturar():
             )
             db.session.add(detalle)
 
-
         db.session.commit()
 
-    return jsonify({"mensaje": "✅ Factura registrada correctamente", "id_factura": factura.id_factura}), 200
+        return jsonify({"mensaje": "✅ Factura registrada correctamente", "id_factura": factura.id_factura}), 200
 
 # Ruta temporal para crear tablas en producción
 @app.route("/crear_tablas")
