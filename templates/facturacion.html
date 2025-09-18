@@ -1,60 +1,60 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Facturación</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+    <head>
+        <meta charset="UTF-8">
+        <title>Facturación</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body class="bg-light">
 
-    <div class="container mt-5">
-        <h2 class="mb-4">Módulo de Facturación</h2>
+        <div class="container mt-5">
+            <h2 class="mb-4">Módulo de Facturación</h2>
 
-        <form id="facturaForm">
-            <table class="table table-bordered table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Producto</th>
-                        <th>Valor</th>
-                        <th>Cantidad</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for producto in productos %}
-                    <tr data-id="{{ producto.id_grupo_producto }}">
-                        <td>{{ producto.nom_producto }}</td>
-                        <td>
-                            <input type="hidden" class="precio" value="{{ producto.valor_producto }}">
-                            ${{ producto.valor_producto }}
-                        </td>
-                        <td>
-                            <input type="number" class="form-control cantidad" min="0" value="0">
-                        </td>
-                        <td class="subtotal">$0</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <form id="facturaForm">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Valor</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto in productos %}
+                        <tr data-id="{{ producto.id_grupo_producto }}">
+                            <td>{{ producto.nom_producto }}</td>
+                            <td>
+                                <input type="hidden" class="precio" value="{{ producto.valor_producto }}">
+                                ${{ producto.valor_producto }}
+                            </td>
+                            <td>
+                                <input type="number" class="form-control cantidad" min="0" value="0">
+                            </td>
+                            <td class="subtotal">$0</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
 
-            <div class="mt-4 d-flex justify-content-between align-items-center">
-                <h4>Total: <span id="total">$0</span></h4>
-                <button type="submit" class="btn btn-primary">Confirmar Factura</button>
-            </div>
-        </form>
-    </div>
+                <div class="mt-4 d-flex justify-content-between align-items-center">
+                    <h4>Total: <span id="total">$0</span></h4>
+                    <button type="submit" class="btn btn-primary">Confirmar Factura</button>
+                </div>
+            </form>
+        </div>
 
-    <a href="{{ url_for('panel_admin') }}" class="btn btn-outline-secondary m-3">Volver al Panel</a>
+        <a href="{{ url_for('panel_admin') }}" class="btn btn-outline-secondary m-3">Volver al Panel</a>
 
-    <!-- Variables disponibles en JS -->
-    <script>
-        const id_usuario = {{ session["id_usuario"] if "id_usuario" in session else "null" }};
-        const rol_usuario = "{{ session['rol'] if 'rol' in session else '' }}";
-    </script>
+        <!-- Variables disponibles en JS -->
+        <script>
+            const id_usuario = "{{ session['id_usuario'] if 'id_usuario' in session else 'null' }}";
+            const rol_usuario = "{{ session['rol'] if 'rol' in session else '' }}";
+        </script>
 
-    <!-- Solo un import de tu archivo -->
-    <script src="{{ url_for('static', filename='js/facturacion.js') }}"></script>
+        <!-- Solo un import de tu archivo -->
+        <script src="{{ url_for('static', filename='js/facturacion.js') }}"></script>
 
-</body>
+    </body>
 </html>
 
