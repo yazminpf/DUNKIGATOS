@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const total = productosSeleccionados.reduce((sum, p) => sum + p.subtotal, 0);
 
-         if (rol_usuario !== "admin") {
-        alert("❌ No tienes permisos para crear facturas");
-        return;
+         if (rol_usuario !== "administrador") {
+            alert("❌ No tienes permisos para crear facturas");
+            return;
          }
 
         fetch("/facturar", {
