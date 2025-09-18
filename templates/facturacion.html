@@ -48,9 +48,10 @@
 
         <!-- Variables disponibles en JS -->
         <script>
-            const id_usuario = "{{ session['id_usuario'] if 'id_usuario' in session else 'null' }}";
-            const rol_usuario = "{{ session['rol'] if 'rol' in session else '' }}";
+            const id_usuario = "{{ session.get('usuario_id', 'null') }}";
+            const rol_usuario = "{{ 'administrador' if session.get('permisos') and 'crear_factura' in session['permisos'] else '' }}";
         </script>
+
 
         <!-- Solo un import de tu archivo -->
         <script src="{{ url_for('static', filename='js/facturacion.js') }}"></script>
